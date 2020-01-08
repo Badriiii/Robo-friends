@@ -3,12 +3,14 @@ import CardList from './CardList';
 import Searchbox from './Searchbox'
 import Scroll from './Scroll';
 import ErrorBoundary from './ErrorBoundary';
+import { connect } from 'react-redux';
+import { setSearchField } from '../action';
+
 class App extends Component {
     constructor() {
         super();
         this.state = {
-            robots: [],
-            searchField: ''
+            robots: []
         }
     }
 
@@ -18,19 +20,16 @@ class App extends Component {
             .then(users => this.setState({ robots: users }))
     }
 
-    onSearchChange = (event) => {
-        this.setState({ searchField: event.target.value })
-    }
-
     render() {
-
-        const filteredRobot = this.state.robots.filter(robots => {
-            return robots.name.toLowerCase().includes(this.state.searchField.toLowerCase())
+        const { robots } = this.state;
+        const { searchField, onSearchChange } = this.props;
+        const filteredRobot = robots.filter(robot => {
+            return robot.name.toLowerCase().includes(searchField.toLowerCase())
         })
         return (
             <div className='tc'>
                 <h1 className='f1'>Robo Friends</h1>
-                <Searchbox searchChange={this.onSearchChange} />
+                <Searchbox searchChange={onSearchChange} />
                 <Scroll>
                     <ErrorBoundary>
                         <CardList robots={filteredRobot} />
@@ -41,4 +40,15 @@ class App extends Component {
     }
 }
 
-export default App;
+// Which props should the component need to listen
+const mapStateToProps = state => ({
+    searchField: state.searchField
+}
+)
+
+// Which props should I listen to that are actions to be dispatched
+const mapDispatchToProps = dispatch => ({
+    onSearchChange: (event) => dispatch(setSearchField(event.target.value))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
