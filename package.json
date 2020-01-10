@@ -2,7 +2,9 @@
   "name": "robofriends",
   "version": "0.1.0",
   "private": true,
+  "homepage":"https://Badriiii.github.io/Robofriends",
   "dependencies": {
+    "gh-pages": "^2.2.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-redux": "^7.1.3",
@@ -11,6 +13,8 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
